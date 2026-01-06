@@ -27,6 +27,16 @@ class HashMap
       end
     end
     @buckets[index] << [key, value]
+
+    if(length.to_f / @capacity > @load_factor)
+      @capacity *= 2
+      new_buckets = Array.new(@capacity) {Array.new}
+      entries.each do |key, value|
+        new_index = hash(key) % @capacity
+        new_buckets[new_index] << [key, value]
+      end
+      @buckets = new_buckets
+    end
   end
 
   def get(key)
